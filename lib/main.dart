@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:notes_app/components/note_preview.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 void main() async {
@@ -38,9 +39,6 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   final _noteStream =
       Supabase.instance.client.from('notes').stream(primaryKey: ['id']);
-  void addNewNote() {
-    return;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -57,12 +55,19 @@ class _MyHomePageState extends State<MyHomePage> {
             return const CircularProgressIndicator();
           }
           final notes = snapshot.data!;
-
-          return ListView.builder(
-              itemCount: notes.length,
-              itemBuilder: (context, index) {
-                return NoteCard(notes: notes, index: index);
-              });
+          return Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: GridView.builder(
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  crossAxisSpacing: 10,
+                  mainAxisSpacing: 10,
+                ),
+                itemCount: notes.length,
+                itemBuilder: (context, index) {
+                  return NoteCard(notes: notes, index: index);
+                }),
+          );
         },
       )),
       floatingActionButton: FloatingActionButton(
@@ -124,11 +129,30 @@ class NoteCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      trailing: const Icon(Icons.chevron_right),
-      title: Text(notes[index]['title'],
-          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-      subtitle: Text(notes[index]['body']),
+    return InkWell(
+      onTap: () {
+        showDialog(
+            context: context,
+            builder: (context) {
+              return NotePreview(
+                title: notes[index]['title'],
+                content: notes[index]['body'],
+                createdOn: DateTime.parse(notes[index]['created_at']),
+              );
+            });
+      },
+      child: Card(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(4),
+        ),
+        child: ListTile(
+          trailing: const Icon(Icons.chevron_right),
+          title: Text(notes[index]['title'],
+              style:
+                  const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+          subtitle: Text(notes[index]['body']),
+        ),
+      ),
     );
   }
 }
