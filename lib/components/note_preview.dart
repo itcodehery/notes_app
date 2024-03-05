@@ -4,16 +4,19 @@ class NotePreview extends StatelessWidget {
   final String title;
   final String content;
   final DateTime createdOn;
+  final Color bgcolor;
 
   const NotePreview(
       {super.key,
       required this.title,
       required this.content,
-      required this.createdOn});
+      required this.createdOn,
+      required this.bgcolor});
 
   @override
   Widget build(BuildContext context) {
     return SimpleDialog(
+      backgroundColor: bgcolor,
       title: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
