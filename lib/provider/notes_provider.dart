@@ -18,6 +18,6 @@ class NoteProvider extends ChangeNotifier {
       'body': body,
       'colors': selectedColor.toString()
     }).then((value) => Navigator.pop(context));
-    notifyListeners();
+    refresh();
   }
 }
