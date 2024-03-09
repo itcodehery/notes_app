@@ -1,24 +1,24 @@
 import 'package:flutter/material.dart';
 
 class NoteColors {
-  static const List<Color> colors = [
+  static Map<Color, String> colors = {
     // red
-    Color.fromARGB(255, 253, 116, 106),
+    const Color.fromARGB(255, 253, 116, 106): 'Red',
     // orange
-    Color.fromARGB(255, 255, 198, 117),
+    const Color.fromARGB(255, 255, 198, 117): 'Orange',
     // yellow
-    Color.fromARGB(255, 255, 231, 135),
+    const Color.fromARGB(255, 255, 231, 135): 'Yellow',
     // green
-    Color.fromARGB(255, 152, 250, 155),
+    const Color.fromARGB(255, 152, 250, 155): 'Green',
     // blue
-    Color.fromARGB(255, 145, 206, 255),
+    const Color.fromARGB(255, 145, 206, 255): 'Blue',
     // purple
-    Color.fromARGB(255, 242, 167, 255),
+    const Color.fromARGB(255, 242, 167, 255): 'Purple',
     // pink
-    Color.fromARGB(255, 255, 159, 191),
+    const Color.fromARGB(255, 255, 159, 191): 'Pink',
     // brown
-    Color.fromARGB(255, 255, 194, 172),
+    const Color.fromARGB(255, 255, 194, 172): 'Brown',
     // grey
-    Color.fromARGB(255, 200, 200, 200),
-  ];
+    const Color.fromARGB(255, 200, 200, 200): 'Grey',
+  };
 }

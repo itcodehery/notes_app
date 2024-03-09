@@ -1,17 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:notes_app/components/note_card.dart';
 import 'package:notes_app/pages/search.dart';
+import 'package:notes_app/provider/notes_provider.dart';
 import 'package:notes_app/utils/note_colors.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:notes_app/components/note_appbar.dart';
+import 'package:provider/provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Supabase.initialize(
-    url: const String.fromEnvironment('PROJ_URL'),
-    anonKey: const String.fromEnvironment('PROJ_KEY'),
+      url: const String.fromEnvironment('PROJ_URL'),
+      anonKey: const String.fromEnvironment('PROJ_KEY'));
+  ChangeNotifierProvider(
+    create: (context) => NoteProvider(),
+    child: const MyApp(),
   );
-  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -21,7 +25,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Bro Notes',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.amberAccent),
         useMaterial3: true,
@@ -63,16 +67,12 @@ class _MyHomePageState extends State<MyHomePage> {
           final notes = snapshot.data!;
           return Padding(
             padding: const EdgeInsets.all(8.0),
-            child: GridView.builder(
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 10,
-                  mainAxisSpacing: 10,
-                ),
-                itemCount: notes.length,
-                itemBuilder: (context, index) {
-                  return NoteCard(notes: notes, index: index);
-                }),
+            child: ListView.builder(
+              itemCount: notes.length,
+              itemBuilder: (context, index) {
+                return NoteCard(notes: notes, index: index);
+              },
+            ),
           );
         },
       )),
@@ -84,7 +84,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 return const NoteDialog();
               }));
         },
-        tooltip: 'Increment',
+        tooltip: 'Add a Note',
         child: const Icon(Icons.add),
       ),
     );
@@ -103,7 +103,7 @@ class _NoteDialogState extends State<NoteDialog> {
   Widget build(BuildContext context) {
     String title = '';
     String body = '';
-    Color selectedColor = Colors.white;
+    Color selectedColor = const Color.fromARGB(255, 200, 200, 200);
 
     return SimpleDialog(
       title: const Text('Add a new note'),
@@ -116,50 +116,52 @@ class _NoteDialogState extends State<NoteDialog> {
           decoration: const InputDecoration(
             labelText: 'Title',
           ),
-          onChanged: (value) => title = value,
+          onChanged: (value) {
+            title = value;
+            debugPrint(title);
+          },
         ),
         TextFormField(
           decoration: const InputDecoration(
             labelText: 'Body',
           ),
-          onChanged: (value) => body = value,
+          onChanged: (value) {
+            body = value;
+            debugPrint(body);
+          },
         ),
-        // a row or similar widget to select the colors for the note
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 20),
-          child: Row(
-            children: NoteColors.colors.map((e) {
-              return InkWell(
-                onTap: () {
-                  // set the color of the note
-                  setState(() {
-                    selectedColor = e;
-                  });
-                },
-                child: Container(
-                  width: 30,
-                  height: 30,
-                  margin: const EdgeInsets.only(right: 2),
-                  decoration: BoxDecoration(shape: BoxShape.circle, color: e),
-                  child: selectedColor == e
-                      ? const Icon(
-                          Icons.check,
-                          color: Colors.white,
-                          size: 10,
-                        )
-                      : null,
-                ),
-              );
-            }).toList(),
-          ),
+        const SizedBox(height: 20),
+        // a drop down menu to select the color of the note
+        DropdownMenu(
+          onSelected: (Color? color) {
+            if (color != null) {
+              selectedColor = color;
+              debugPrint(selectedColor.toString());
+            }
+          },
+          label: const Text('Select a color'),
+          menuHeight: 200,
+          width: 200,
+          dropdownMenuEntries: <DropdownMenuEntry<Color>>[
+            for (var color in NoteColors.colors.entries)
+              DropdownMenuEntry(
+                  value: color.key,
+                  label: color.value,
+                  leadingIcon: Container(
+                      width: 20,
+                      height: 20,
+                      decoration: BoxDecoration(
+                        color: color.key,
+                        shape: BoxShape.circle,
+                      ))),
+          ],
         ),
+        const SizedBox(height: 20),
         ElevatedButton(
           onPressed: () async {
-            await Supabase.instance.client.from('notes').insert({
-              'title': title,
-              'body': body,
-              'color': selectedColor.toString()
-            }).then((value) => Navigator.pop(context));
+            debugPrint('Title: $title, Body: $body, Color: $selectedColor');
+            await NoteProvider().addNote(title, body, selectedColor, context);
+            NoteProvider().refresh();
           },
           child: const Text('Add Note'),
         ),
