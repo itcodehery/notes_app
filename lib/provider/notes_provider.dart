@@ -11,13 +11,16 @@ class NoteProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> addNote(String title, String body, Color selectedColor,
-      BuildContext context) async {
+  Future<void> addNote(String title, String body, BuildContext context) async {
     await Supabase.instance.client.from('notes').insert({
       'title': title,
       'body': body,
-      'colors': selectedColor.toString()
     }).then((value) => Navigator.pop(context));
+    refresh();
+  }
+
+  Future<void> deleteNote(int id) async {
+    await Supabase.instance.client.from('notes').delete().eq('id', id);
     refresh();
   }
 }

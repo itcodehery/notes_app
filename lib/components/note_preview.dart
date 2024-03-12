@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class NotePreview extends StatelessWidget {
+class NotePreview extends StatefulWidget {
   final String title;
   final String content;
   final DateTime createdOn;
@@ -14,9 +14,14 @@ class NotePreview extends StatelessWidget {
       required this.bgcolor});
 
   @override
+  State<NotePreview> createState() => _NotePreviewState();
+}
+
+class _NotePreviewState extends State<NotePreview> {
+  @override
   Widget build(BuildContext context) {
     return SimpleDialog(
-      backgroundColor: bgcolor,
+      backgroundColor: widget.bgcolor,
       title: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -45,12 +50,12 @@ class NotePreview extends StatelessWidget {
       insetPadding: const EdgeInsets.all(20),
       contentPadding: const EdgeInsets.all(20),
       children: [
-        Text(title,
+        Text(widget.title,
             style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
         Text(
-            "${createdOn.day}/${createdOn.month}/${createdOn.year} | ${createdOn.hour}:${createdOn.minute}"),
+            "${widget.createdOn.day}/${widget.createdOn.month}/${widget.createdOn.year} | ${widget.createdOn.hour}:${widget.createdOn.minute}"),
         const Divider(),
-        Text(content)
+        Text(widget.content)
       ],
     );
   }
