@@ -20,6 +20,7 @@ class NoteCard extends StatelessWidget {
             context: context,
             builder: (context) {
               return NotePreview(
+                id: notes[index]['id'],
                 bgcolor: notes[index]['color'] ?? Theme.of(context).cardColor,
                 title: notes[index]['title'],
                 content: notes[index]['body'],
@@ -38,7 +39,7 @@ class NoteCard extends StatelessWidget {
           ),
         ),
         elevation: 0,
-        color: notes[index]['color'] ?? AppTheme.colorTheme.cardColor,
+        color: AppTheme.colorTheme.cardColor,
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 26),
           child: Column(
@@ -46,12 +47,13 @@ class NoteCard extends StatelessWidget {
             children: [
               Row(children: [
                 SizedBox(
-                    width: 90,
+                    width: 100,
                     child: Text(
                       notes[index]['title'] ?? 'Untitled',
                       style: TextStyle(
-                        fontSize: 16,
+                        fontSize: 18,
                         color: AppTheme.colorTheme.primaryColor,
+                        fontFamily: 'Jost',
                         fontWeight: FontWeight.bold,
                       ),
                       overflow: TextOverflow.ellipsis,
@@ -66,12 +68,30 @@ class NoteCard extends StatelessWidget {
               Text(
                 notes[index]['body'] ?? 'No content',
                 style: TextStyle(
-                  fontSize: 16,
+                  fontSize: 18,
+                  fontFamily: 'Jost',
                   color: AppTheme.colorTheme.splashColor,
                 ),
                 maxLines: 5,
                 overflow: TextOverflow.ellipsis,
               ),
+              // if (notes[index]['tags'] != null)
+              //   Container(
+              //     height: 30,
+              //     alignment: Alignment.centerLeft,
+              //     padding: const EdgeInsets.symmetric(horizontal: 20),
+              //     decoration: BoxDecoration(
+              //       color: AppTheme.colorTheme.canvasColor,
+              //       borderRadius: BorderRadius.circular(20),
+              //     ),
+              //     child: Text(
+              //       notes[index]['tags'],
+              //       style: TextStyle(
+              //           color: AppTheme.colorTheme.primaryColor,
+              //           fontFamily: 'Jost',
+              //           fontSize: 16),
+              //     ),
+              //   ),
             ],
           ),
         ),

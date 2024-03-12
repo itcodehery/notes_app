@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:notes_app/main.dart';
+import 'package:notes_app/provider/notes_provider.dart';
+import 'package:provider/provider.dart';
 
 class NoteTopBar extends StatefulWidget {
   const NoteTopBar({
@@ -27,8 +29,8 @@ class _NoteTopBarState extends State<NoteTopBar> {
         minimumSize: const MaterialStatePropertyAll(Size(175, 60)),
         elevation: const MaterialStatePropertyAll(0),
         side: const MaterialStatePropertyAll(
-            BorderSide(color: Colors.black12, width: 1)),
-        backgroundColor: const MaterialStatePropertyAll(Colors.black12));
+            BorderSide(color: Colors.black12, width: 2)),
+        backgroundColor: const MaterialStatePropertyAll(Colors.transparent));
 
     var iconButtonStyle = ButtonStyle(
         backgroundColor: const MaterialStatePropertyAll(Colors.white),
@@ -85,11 +87,33 @@ class _NoteTopBarState extends State<NoteTopBar> {
             ),
             const SizedBox(height: 10),
             const Text('Hello, Hari!',
-                style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold)),
-            const Text(
-              'You\'ve made 5 notes so far!',
-              style: TextStyle(fontSize: 16),
-            ),
+                style: TextStyle(
+                    fontSize: 32,
+                    fontWeight: FontWeight.w900,
+                    fontFamily: 'Jost')),
+            // const Text(
+            //   'You\'ve made 5 notes so far!',
+            //   style: TextStyle(fontSize: 20, fontFamily: 'Jost'),
+            // ),
+            Consumer<NoteProvider>(
+                // Access provider to call refresh() on add/delete
+                builder: (context, provider, child) =>
+                    StreamBuilder<List<Map<String, dynamic>>>(
+                      stream: provider.noteStream,
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          final notes = snapshot.data!;
+                          return Text(
+                            'You\'ve made ${notes.length} notes so far!',
+                            // ... (existing text style)
+                            style: const TextStyle(
+                                fontSize: 20, fontFamily: 'Jost'),
+                          );
+                        } else {
+                          return const Text('Loading...');
+                        }
+                      },
+                    )),
             const SizedBox(height: 20),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -97,17 +121,41 @@ class _NoteTopBarState extends State<NoteTopBar> {
                 ElevatedButton(
                     style: buttonStyle,
                     onPressed: () {},
-                    child: const Text(
-                      'Favorites',
-                      style: TextStyle(color: Colors.black),
+                    child: const Row(
+                      children: [
+                        Icon(
+                          Icons.star_border,
+                          color: Colors.black,
+                        ),
+                        SizedBox(width: 8),
+                        Text(
+                          'Favorites',
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontFamily: 'Jost',
+                              fontSize: 16),
+                        ),
+                      ],
                     )),
-                const SizedBox(width: 5),
+                const SizedBox(width: 8),
                 ElevatedButton(
                     style: buttonStyle,
                     onPressed: () {},
-                    child: const Text(
-                      'Search',
-                      style: TextStyle(color: Colors.black),
+                    child: const Row(
+                      children: [
+                        Icon(
+                          Icons.search,
+                          color: Colors.black,
+                        ),
+                        SizedBox(width: 5),
+                        Text(
+                          'Search',
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontFamily: 'Jost',
+                              fontSize: 16),
+                        ),
+                      ],
                     )),
               ],
             ),
