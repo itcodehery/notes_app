@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:notes_app/main.dart';
+import 'package:notes_app/pages/bin.dart';
+import 'package:notes_app/pages/search.dart';
 import 'package:notes_app/provider/notes_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -26,7 +28,7 @@ class _NoteTopBarState extends State<NoteTopBar> {
             borderRadius: BorderRadius.circular(40),
           ),
         ),
-        minimumSize: const MaterialStatePropertyAll(Size(175, 60)),
+        minimumSize: const MaterialStatePropertyAll(Size(175, 70)),
         elevation: const MaterialStatePropertyAll(0),
         side: const MaterialStatePropertyAll(
             BorderSide(color: Colors.black12, width: 2)),
@@ -41,7 +43,6 @@ class _NoteTopBarState extends State<NoteTopBar> {
         ),
         elevation: const MaterialStatePropertyAll(1),
         minimumSize: const MaterialStatePropertyAll(Size(60, 60)));
-
     return Card(
       margin: const EdgeInsets.all(0),
       shape: const RoundedRectangleBorder(
@@ -69,7 +70,13 @@ class _NoteTopBarState extends State<NoteTopBar> {
                     )),
                 const Spacer(),
                 ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => const DeletedNotesPage(),
+                        ),
+                      );
+                    },
                     style: iconButtonStyle,
                     child: const Icon(
                       Icons.delete_outline,
@@ -91,10 +98,6 @@ class _NoteTopBarState extends State<NoteTopBar> {
                     fontSize: 32,
                     fontWeight: FontWeight.w900,
                     fontFamily: 'Jost')),
-            // const Text(
-            //   'You\'ve made 5 notes so far!',
-            //   style: TextStyle(fontSize: 20, fontFamily: 'Jost'),
-            // ),
             Consumer<NoteProvider>(
                 // Access provider to call refresh() on add/delete
                 builder: (context, provider, child) =>
@@ -140,7 +143,12 @@ class _NoteTopBarState extends State<NoteTopBar> {
                 const SizedBox(width: 8),
                 ElevatedButton(
                     style: buttonStyle,
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => SearchPage()));
+                    },
                     child: const Row(
                       children: [
                         Icon(

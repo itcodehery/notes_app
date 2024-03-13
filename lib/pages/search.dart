@@ -1,3 +1,7 @@
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:notes_app/components/note_card.dart';
+import 'package:notes_app/provider/notes_provider.dart';
+import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:flutter/material.dart';
 
@@ -13,55 +17,82 @@ class _SearchPageState extends State<SearchPage> {
   String searchQuery = '';
   List<Map<String, dynamic>> searchResults = [];
 
-  Future<void> search(String query) async {
-    if (query.isEmpty) {
-      return;
+  List<Map<String, dynamic>> search(
+      List<Map<String, dynamic>> listToSearch, String searchQuery) {
+    List<Map<String, dynamic>> results = [];
+    for (var note in listToSearch) {
+      if (note['title'].toString().contains(searchQuery) ||
+          note['content'].toString().contains(searchQuery)) {
+        results.add(note);
+      }
     }
-
-    getDatabaseItems(query);
-  }
-
-  void getDatabaseItems(String query) async {
-    final notesStream =
-        await supabase.from('notes').select('*').eq('title', query);
-    setState(() {
-      searchResults = notesStream;
-    });
+    return results;
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          title: TextFormField(
-            autofocus: true,
-            onChanged: (value) {
-              setState(() {
-                debugPrint('entered: $value');
-                searchQuery = value;
-                search(searchQuery);
-              });
-            },
-            decoration: const InputDecoration(
-              hintText: 'Enter search query',
+    return Consumer<NoteProvider>(
+      builder: (context, value, child) => Scaffold(
+          appBar: AppBar(
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(30),
+                bottomRight: Radius.circular(30),
+              ),
             ),
-          ),
-        ),
-        body: IndexedStack(
-          alignment: Alignment.center,
-          index: searchResults.isEmpty ? 0 : 1,
-          children: [
-            const SizedBox(height: 10),
-            ListView.builder(
-              itemCount: searchResults.length,
-              itemBuilder: (context, index) {
-                return ListTile(
-                  title: Text(searchResults[index]['title']),
-                  subtitle: Text(searchResults[index]['content']),
-                );
+            backgroundColor: const Color.fromARGB(255, 237, 255, 207),
+            title: TextFormField(
+              autofocus: true,
+              cursorColor: Colors.black,
+              style: const TextStyle(color: Colors.black),
+              onChanged: (value) {
+                setState(() {
+                  if (value.isEmpty) {
+                    searchQuery = '';
+                  } else {
+                    debugPrint('entered: $value');
+                    searchQuery = value;
+                  }
+                });
               },
+              decoration: const InputDecoration(
+                hintText: 'Enter search query',
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(style: BorderStyle.none),
+                ),
+              ),
             ),
-          ],
-        ));
+            foregroundColor: Colors.black,
+            iconTheme: const IconThemeData(color: Colors.black),
+          ),
+          body: StreamBuilder(
+              stream: value.noteStream,
+              builder: (context, snapshot) {
+                if (!snapshot.hasData) {
+                  return const CircularProgressIndicator();
+                }
+                final notes = snapshot.data!;
+                searchResults = search(notes, searchQuery);
+                if (searchResults.isEmpty) {
+                  return const Center(
+                      child: Text(
+                    'No results found',
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'Jost',
+                      color: Colors.white,
+                    ),
+                  ));
+                }
+                return ListView.builder(
+                    itemCount: searchResults.length,
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 0, vertical: 8),
+                    itemBuilder: (context, index) {
+                      return NoteCard(notes: searchResults, index: index);
+                    });
+              })),
+    );
   }
 }

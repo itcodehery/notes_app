@@ -3,14 +3,14 @@ import 'package:notes_app/provider/notes_provider.dart';
 import 'package:notes_app/theme.dart';
 import 'package:provider/provider.dart';
 
-class NotePreview extends StatefulWidget {
+class DeletedNotePreview extends StatefulWidget {
   final String title;
   final String content;
   final DateTime createdOn;
   final Color bgcolor;
   final int id;
 
-  const NotePreview(
+  const DeletedNotePreview(
       {super.key,
       required this.title,
       required this.content,
@@ -19,10 +19,10 @@ class NotePreview extends StatefulWidget {
       required this.id});
 
   @override
-  State<NotePreview> createState() => _NotePreviewState();
+  State<DeletedNotePreview> createState() => _DeletedNotePreviewState();
 }
 
-class _NotePreviewState extends State<NotePreview> {
+class _DeletedNotePreviewState extends State<DeletedNotePreview> {
   @override
   Widget build(BuildContext context) {
     // variables
@@ -64,22 +64,11 @@ class _NotePreviewState extends State<NotePreview> {
             style: buttonStyle,
             onPressed: () async {
               await value
-                  .setAsDeleted(widget.id)
+                  .setAsNotDeleted(widget.id)
                   .then((value) => Navigator.pop(context));
             },
             child: const Icon(
-              Icons.delete_outline,
-              color: Colors.black,
-            ),
-          ),
-          const SizedBox(width: 10),
-          ElevatedButton(
-            style: buttonStyle,
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            child: const Icon(
-              Icons.edit_outlined,
+              Icons.restore,
               color: Colors.black,
             ),
           ),

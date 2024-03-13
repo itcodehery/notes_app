@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:notes_app/components/note_appbar.dart';
 import 'package:notes_app/components/note_card.dart';
@@ -13,7 +14,9 @@ void main() async {
   // dummy initialization
   // initialize won't work without actual url and key
   await Supabase.initialize(
-      url: 'https://<supabase-url>.supabase.co', anonKey: 'public-anon-key');
+    url: "",
+    anonKey: "",
+  );
   runApp(ChangeNotifierProvider(
     create: (context) => NoteProvider(),
     child: const MyApp(),
@@ -52,14 +55,16 @@ class _MyHomePageState extends State<MyHomePage> {
     return Consumer<NoteProvider>(
       builder: (context, value, child) => Scaffold(
         appBar: PreferredSize(
-            preferredSize: const Size.fromHeight(250),
+            preferredSize: const Size.fromHeight(280),
             child: NoteTopBar(widget: widget)),
         body: Center(
             child: StreamBuilder<List<Map<String, dynamic>>>(
           stream: value.noteStream,
           builder: (context, snapshot) {
             if (!snapshot.hasData) {
-              return const CircularProgressIndicator();
+              return CupertinoActivityIndicator(
+                color: AppTheme.colorTheme.primaryColor,
+              );
             }
             final notes = snapshot.data!;
 
@@ -68,12 +73,6 @@ class _MyHomePageState extends State<MyHomePage> {
                   child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  // image from assets
-                  // const Image(
-                  //   image: AssetImage('assets/images/nonotes.png'),
-                  //   width: 200,
-                  //   height: 200,
-                  // ),
                   Text(
                     'No notes yet',
                     style: TextStyle(
