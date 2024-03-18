@@ -51,11 +51,13 @@ class _NotePreviewState extends State<NotePreview> {
         title: Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
           ElevatedButton(
             style: buttonStyle,
-            onPressed: () {
-              Navigator.pop(context);
+            onPressed: () async {
+              await value
+                  .setAsFavorite(widget.id)
+                  .then((value) => Navigator.pop(context));
             },
             child: const Icon(
-              Icons.clear,
+              Icons.favorite_border,
               color: Colors.black,
             ),
           ),

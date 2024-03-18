@@ -41,7 +41,7 @@ class _NoteTopBarState extends State<NoteTopBar> {
             borderRadius: BorderRadius.circular(40),
           ),
         ),
-        elevation: const MaterialStatePropertyAll(1),
+        elevation: const MaterialStatePropertyAll(0),
         minimumSize: const MaterialStatePropertyAll(Size(60, 60)));
     return Card(
       margin: const EdgeInsets.all(0),
@@ -65,7 +65,7 @@ class _NoteTopBarState extends State<NoteTopBar> {
                     onPressed: () {},
                     style: iconButtonStyle,
                     child: const Icon(
-                      Icons.account_circle_outlined,
+                      Icons.refresh,
                       color: Colors.black,
                     )),
                 const Spacer(),
@@ -127,7 +127,7 @@ class _NoteTopBarState extends State<NoteTopBar> {
                     child: const Row(
                       children: [
                         Icon(
-                          Icons.star_border,
+                          Icons.favorite_border,
                           color: Colors.black,
                         ),
                         SizedBox(width: 8),

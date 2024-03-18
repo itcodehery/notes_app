@@ -87,6 +87,7 @@ class _MyHomePageState extends State<MyHomePage> {
             return Padding(
               padding: const EdgeInsets.all(8.0),
               child: MasonryGridView.count(
+                  physics: const BouncingScrollPhysics(),
                   crossAxisCount: 2,
                   itemCount: notes.length,
                   itemBuilder: (context, index) {
@@ -106,7 +107,7 @@ class _MyHomePageState extends State<MyHomePage> {
           tooltip: 'Add a Note',
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10),
-            side: const BorderSide(color: Colors.black12, width: 1),
+            side: const BorderSide(color: Colors.black45, width: 2),
           ),
           backgroundColor: AppTheme.colorTheme.primaryColor,
           child: const Icon(Icons.add, color: Colors.black),
