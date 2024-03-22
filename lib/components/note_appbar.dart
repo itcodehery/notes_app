@@ -3,6 +3,7 @@ import 'package:notes_app/main.dart';
 import 'package:notes_app/pages/bin.dart';
 import 'package:notes_app/pages/favorites.dart';
 import 'package:notes_app/pages/search.dart';
+import 'package:notes_app/pages/settings.dart';
 import 'package:notes_app/provider/notes_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -29,7 +30,7 @@ class _NoteTopBarState extends State<NoteTopBar> {
             borderRadius: BorderRadius.circular(40),
           ),
         ),
-        minimumSize: const MaterialStatePropertyAll(Size(175, 70)),
+        minimumSize: const MaterialStatePropertyAll(Size(150, 60)),
         elevation: const MaterialStatePropertyAll(0),
         side: const MaterialStatePropertyAll(
             BorderSide(color: Colors.black12, width: 2)),
@@ -44,16 +45,26 @@ class _NoteTopBarState extends State<NoteTopBar> {
         ),
         elevation: const MaterialStatePropertyAll(0),
         minimumSize: const MaterialStatePropertyAll(Size(60, 60)));
-    return Card(
-      margin: const EdgeInsets.all(0),
-      shape: const RoundedRectangleBorder(
+    return Container(
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(colors: [
+          Color.fromARGB(255, 237, 255, 207),
+          Color.fromARGB(255, 217, 255, 156),
+        ], begin: Alignment.topLeft, end: Alignment.bottomRight),
         borderRadius: BorderRadius.only(
           bottomLeft: Radius.circular(40),
           bottomRight: Radius.circular(40),
         ),
       ),
-      elevation: 0,
-      color: const Color.fromARGB(255, 237, 255, 207),
+      // margin: const EdgeInsets.all(0),
+      // shape: const RoundedRectangleBorder(
+      //   borderRadius: BorderRadius.only(
+      //     bottomLeft: Radius.circular(40),
+      //     bottomRight: Radius.circular(40),
+      //   ),
+      // ),
+      // elevation: 0,
+      // color: const Color.fromARGB(255, 237, 255, 207),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
         child: Column(
@@ -88,7 +99,13 @@ class _NoteTopBarState extends State<NoteTopBar> {
                     )),
                 const SizedBox(width: 5),
                 ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => const SettingsPage(),
+                        ),
+                      );
+                    },
                     style: iconButtonStyle,
                     child: const Icon(
                       Icons.settings_outlined,

@@ -80,6 +80,7 @@ class NoteCard extends StatelessWidget {
                   const Spacer(),
                   Icon(
                     Icons.arrow_outward_sharp,
+                    size: 16,
                     color: AppTheme.colorTheme.primaryColor,
                   ),
                 ]),

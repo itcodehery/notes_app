@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:notes_app/components/note_appbar.dart';
 import 'package:notes_app/components/note_card.dart';
+import 'package:notes_app/pages/nointernet.dart';
 import 'package:notes_app/pages/search.dart';
 import 'package:notes_app/provider/notes_provider.dart';
 import 'package:notes_app/theme.dart';
@@ -26,12 +29,45 @@ void main() async {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
+  //check if internet is available
+  Future<bool> checkInternet() async {
+    try {
+      final result = await InternetAddress.lookup('google.com');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        return true;
+      }
+    } on SocketException catch (_) {
+      return false;
+    }
+    return false;
+  }
+
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Bro Notes',
-      home: const MyHomePage(title: 'BroCom Notes'),
+      debugShowCheckedModeBanner: false,
+      home: FutureBuilder(
+        future: checkInternet(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Scaffold(
+              body: Center(
+                child: CupertinoActivityIndicator(
+                  color: AppTheme.colorTheme.primaryColor,
+                ),
+              ),
+            );
+          }
+          if (snapshot.hasData) {
+            if (snapshot.data == true) {
+              return const MyHomePage(title: 'Bro Notes');
+            }
+          }
+          return const NoInternetPage();
+        },
+      ),
       theme: AppTheme.colorTheme,
       routes: {
         '/add': (context) => const MyHomePage(title: 'Add Note'),
@@ -153,6 +189,7 @@ class _NoteDialogState extends State<NoteDialog> {
         ),
         const SizedBox(height: 10),
         TextFormField(
+          style: const TextStyle(color: Colors.white),
           decoration: getInputDeco('Body'),
           onChanged: (value) {
             body = value;

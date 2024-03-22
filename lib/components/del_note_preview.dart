@@ -56,25 +56,41 @@ class _DeletedNotePreviewState extends State<DeletedNotePreview> {
               showDialog(
                 context: context,
                 builder: (context) => AlertDialog(
-                  title: const Text('Delete forever?'),
+                  backgroundColor: AppTheme.colorTheme.canvasColor,
+                  title: Text('Delete forever?', style: textStyle),
                   content: const Text(
-                      'Are you sure you want to delete this note forever?'),
+                    'Are you sure you want to delete this note forever?',
+                    style: textStyle2,
+                  ),
                   actions: [
                     TextButton(
                       onPressed: () {
                         Navigator.pop(context);
                       },
-                      child: const Text('No'),
+                      child: const Text('No',
+                          style: TextStyle(color: Colors.white)),
                     ),
                     TextButton(
+                      style: ButtonStyle(
+                        backgroundColor:
+                            MaterialStateProperty.all(Colors.redAccent),
+                        shape: MaterialStatePropertyAll(RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30),
+                        )),
+                      ),
                       onPressed: () async {
                         await value.deleteNote(widget.id).then((value) {
                           Navigator.pop(context);
                           Navigator.pop(context);
                         });
                       },
-                      child: const Text('Yes'),
+                      child: const Text(
+                        'Yes',
+                        style:
+                            TextStyle(color: Colors.white, fontFamily: 'Jost'),
+                      ),
                     ),
+                    const SizedBox(width: 4),
                   ],
                 ),
               );

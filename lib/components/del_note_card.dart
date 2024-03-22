@@ -62,6 +62,7 @@ class DeletedNoteCard extends StatelessWidget {
                 const Spacer(),
                 Icon(
                   Icons.delete_outline_outlined,
+                  size: 16,
                   color: AppTheme.colorTheme.primaryColor,
                 ),
               ]),

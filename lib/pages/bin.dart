@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:notes_app/components/del_note_card.dart';
-import 'package:notes_app/components/note_card.dart';
 import 'package:notes_app/provider/notes_provider.dart';
 import 'package:notes_app/theme.dart';
 import 'package:provider/provider.dart';
@@ -23,7 +22,7 @@ class _DeletedNotesPageState extends State<DeletedNotesPage> {
           title: const Row(
             children: [
               Spacer(),
-              Text('Deleted Notes',
+              Text('Bin',
                   style: TextStyle(
                       color: Colors.black,
                       fontFamily: 'Jost',
@@ -57,18 +56,17 @@ class _DeletedNotesPageState extends State<DeletedNotesPage> {
             final notes = snapshot.data!;
             if (notes.isEmpty) {
               return Center(
-                  child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    'No notes yet',
-                    style: TextStyle(
-                      color: AppTheme.colorTheme.splashColor,
-                      fontFamily: 'Jost',
-                      fontSize: 20,
-                    ),
+                  child: SizedBox(
+                width: 300,
+                child: Text(
+                  'Notes here will be auto-deleted permanently in 24 hours.',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: AppTheme.colorTheme.splashColor,
+                    fontFamily: 'Jost',
+                    fontSize: 20,
                   ),
-                ],
+                ),
               ));
             }
             return Padding(
