@@ -52,10 +52,35 @@ class _DeletedNotePreviewState extends State<DeletedNotePreview> {
           ElevatedButton(
             style: buttonStyle,
             onPressed: () {
-              Navigator.pop(context);
+              // delete forever
+              showDialog(
+                context: context,
+                builder: (context) => AlertDialog(
+                  title: const Text('Delete forever?'),
+                  content: const Text(
+                      'Are you sure you want to delete this note forever?'),
+                  actions: [
+                    TextButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: const Text('No'),
+                    ),
+                    TextButton(
+                      onPressed: () async {
+                        await value.deleteNote(widget.id).then((value) {
+                          Navigator.pop(context);
+                          Navigator.pop(context);
+                        });
+                      },
+                      child: const Text('Yes'),
+                    ),
+                  ],
+                ),
+              );
             },
             child: const Icon(
-              Icons.clear,
+              Icons.delete_forever_outlined,
               color: Colors.black,
             ),
           ),

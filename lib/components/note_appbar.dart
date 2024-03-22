@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:notes_app/main.dart';
 import 'package:notes_app/pages/bin.dart';
+import 'package:notes_app/pages/favorites.dart';
 import 'package:notes_app/pages/search.dart';
 import 'package:notes_app/provider/notes_provider.dart';
 import 'package:provider/provider.dart';
@@ -62,7 +63,10 @@ class _NoteTopBarState extends State<NoteTopBar> {
             Row(
               children: [
                 ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Provider.of<NoteProvider>(context, listen: false)
+                          .refresh();
+                    },
                     style: iconButtonStyle,
                     child: const Icon(
                       Icons.refresh,
@@ -123,7 +127,12 @@ class _NoteTopBarState extends State<NoteTopBar> {
               children: [
                 ElevatedButton(
                     style: buttonStyle,
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const FavoritesPage()));
+                    },
                     child: const Row(
                       children: [
                         Icon(

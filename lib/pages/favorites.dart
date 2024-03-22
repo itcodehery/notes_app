@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:notes_app/components/note_card.dart';
 import 'package:notes_app/components/note_preview.dart';
 import 'package:notes_app/theme.dart';
 import 'package:provider/provider.dart';
@@ -42,12 +44,14 @@ class _FavoritesPageState extends State<FavoritesPage> {
         ),
       ),
       body: Consumer<NoteProvider>(builder: (context, value, child) {
-        StreamBuilder(
+        return StreamBuilder(
           stream: value.favoriteNoteStream,
           builder: (context, snapshot) {
             if (!snapshot.hasData) {
-              return CupertinoActivityIndicator(
-                color: AppTheme.colorTheme.primaryColor,
+              return Center(
+                child: CupertinoActivityIndicator(
+                  color: AppTheme.colorTheme.primaryColor,
+                ),
               );
             }
             final notes = snapshot.data!;
@@ -67,17 +71,14 @@ class _FavoritesPageState extends State<FavoritesPage> {
                 ],
               ));
             }
-            return ListView.builder(
-              itemCount: notes.length,
-              itemBuilder: (context, index) {
-                return NotePreview(
-                  title: notes[index]['title'],
-                  content: notes[index]['content'],
-                  createdOn: DateTime.parse(notes[index]['created_on']),
-                  bgcolor: Color(int.parse(notes[index]['bgcolor'])),
-                  id: notes[index]['id'],
-                );
-              },
+            return Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: MasonryGridView.count(
+                  crossAxisCount: 2,
+                  itemCount: notes.length,
+                  itemBuilder: (context, index) {
+                    return NoteCard(notes: notes.toList(), index: index);
+                  }),
             );
           },
         );

@@ -8,14 +8,14 @@ import 'package:notes_app/theme.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  // dummy initialization
-  // initialize won't work without actual url and key
+  await dotenv.load(fileName: ".env");
   await Supabase.initialize(
-    url: "",
-    anonKey: "",
+    url: dotenv.env['PROJ_URL']!,
+    anonKey: dotenv.env['PROJ_KEY']!,
   );
   runApp(ChangeNotifierProvider(
     create: (context) => NoteProvider(),

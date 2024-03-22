@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:notes_app/provider/notes_provider.dart';
 import 'package:notes_app/theme.dart';
 import 'package:provider/provider.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class NotePreview extends StatefulWidget {
   final String title;
@@ -23,6 +24,35 @@ class NotePreview extends StatefulWidget {
 }
 
 class _NotePreviewState extends State<NotePreview> {
+  IconData favoriteIcon = Icons.circle_outlined;
+
+  Future<bool> getIsFavorite(int id) async {
+    var boolema = false;
+    boolema = await Supabase.instance.client
+        .from('notes')
+        .select()
+        .eq('id', id)
+        .then((value) => value[0]['is_favorite'] as bool);
+    debugPrint('$boolema');
+    return boolema;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getIsFavorite(widget.id).then((value) {
+      if (value) {
+        setState(() {
+          favoriteIcon = Icons.favorite;
+        });
+      } else {
+        setState(() {
+          favoriteIcon = Icons.favorite_border;
+        });
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     // variables
@@ -52,12 +82,22 @@ class _NotePreviewState extends State<NotePreview> {
           ElevatedButton(
             style: buttonStyle,
             onPressed: () async {
-              await value
-                  .setAsFavorite(widget.id)
-                  .then((value) => Navigator.pop(context));
+              if (await getIsFavorite(widget.id)) {
+                debugPrint('Entered if');
+                await value.setAsNotFavorite(widget.id);
+                setState(() {
+                  favoriteIcon = Icons.favorite_border;
+                });
+              } else {
+                debugPrint('Entered else');
+                await value.setAsFavorite(widget.id);
+                setState(() {
+                  favoriteIcon = Icons.favorite;
+                });
+              }
             },
-            child: const Icon(
-              Icons.favorite_border,
+            child: Icon(
+              favoriteIcon,
               color: Colors.black,
             ),
           ),
@@ -65,9 +105,17 @@ class _NotePreviewState extends State<NotePreview> {
           ElevatedButton(
             style: buttonStyle,
             onPressed: () async {
-              await value
-                  .setAsDeleted(widget.id)
-                  .then((value) => Navigator.pop(context));
+              await value.setAsDeleted(widget.id).then((value) {
+                Navigator.pop(context);
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Note deleted',
+                        style: TextStyle(fontSize: 18, fontFamily: 'Jost')),
+                    duration: Duration(seconds: 2),
+                  ),
+                );
+              });
+              //toast
             },
             child: const Icon(
               Icons.delete_outline,

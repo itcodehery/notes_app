@@ -25,6 +25,22 @@ class NoteProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  //function to refresh the stream
+  void refreshDeleted() {
+    deletedNoteStream.listen((event) {
+      notifyListeners();
+    });
+    notifyListeners();
+  }
+
+  //function to refresh the stream
+  void refreshFavorite() {
+    favoriteNoteStream.listen((event) {
+      notifyListeners();
+    });
+    notifyListeners();
+  }
+
   Future<void> addNote(String title, String body, BuildContext context) async {
     await Supabase.instance.client.from('notes').insert({
       'title': title,
@@ -59,12 +75,11 @@ class NoteProvider extends ChangeNotifier {
     refresh();
   }
 
-  // Future<bool> getIsFavorite(int id) async {
-  //   var item =
-  //       await Supabase.instance.client.from('notes').select().eq('id', id);
-  //   return item[id]['is_favorite'] as bool;
-  // }
   //convert the above function to return a bool instead of a Future<bool>
+  bool getIsFavorite(int id) {
+    var item = Supabase.instance.client.from('notes').select().eq('id', id);
+    return item.select('is_favorite') as bool;
+  }
 
   Future<void> setAsNotFavorite(int id) async {
     await Supabase.instance.client

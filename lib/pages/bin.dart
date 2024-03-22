@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:notes_app/components/del_note_card.dart';
@@ -49,7 +50,9 @@ class _DeletedNotesPageState extends State<DeletedNotesPage> {
           stream: value.deletedNoteStream,
           builder: (context, snapshot) {
             if (!snapshot.hasData) {
-              return const CircularProgressIndicator();
+              return CupertinoActivityIndicator(
+                color: AppTheme.colorTheme.primaryColor,
+              );
             }
             final notes = snapshot.data!;
             if (notes.isEmpty) {

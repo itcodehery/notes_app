@@ -39,6 +39,7 @@ dependencies:
   provider: ^6.1.2
   flutter_staggered_grid_view: 
   google_fonts: ^6.2.0
+  flutter_dotenv: ^5.1.0
 
 dev_dependencies:
   flutter_test:
