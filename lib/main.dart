@@ -46,28 +46,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Bro Notes',
+      title: 'Noter',
       debugShowCheckedModeBanner: false,
-      home: FutureBuilder(
-        future: checkInternet(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Scaffold(
-              body: Center(
-                child: CupertinoActivityIndicator(
-                  color: AppTheme.colorTheme.primaryColor,
-                ),
-              ),
-            );
-          }
-          if (snapshot.hasData) {
-            if (snapshot.data == true) {
-              return const MyHomePage(title: 'Bro Notes');
-            }
-          }
-          return const NoInternetPage();
-        },
-      ),
+      home: const MyHomePage(title: 'Bro Notes'),
       theme: AppTheme.colorTheme,
       routes: {
         '/add': (context) => const MyHomePage(title: 'Add Note'),

@@ -9,9 +9,16 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
+  // to create something similar to a Javascript Object
+  //no
   Map<String, dynamic> settings = {
     'Theme': 'Light',
-    'Font': 'Jost',
+    'Font Size': 16,
+    'Font Family': 'Jost',
+    'App Name': 'Bro Notes',
+    'App Developer': 'Hari Prasad',
+    'App Framework': 'Flutter',
+    'App Version': 'Alpha v0.1.0',
   };
 
   @override
@@ -21,7 +28,7 @@ class _SettingsPageState extends State<SettingsPage> {
         title: const Row(
           children: [
             Spacer(),
-            Text('Settings',
+            Text('About',
                 style: TextStyle(
                     color: Colors.black,
                     fontFamily: 'Jost',
@@ -48,11 +55,13 @@ class _SettingsPageState extends State<SettingsPage> {
           padding: const EdgeInsets.all(8.0),
           child: Column(
             children: [
-              Card(
-                color: const Color.fromARGB(255, 237, 255, 207),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20),
-                ),
+              Container(
+                decoration: BoxDecoration(
+                    gradient: const LinearGradient(colors: [
+                      Color.fromARGB(255, 237, 255, 207),
+                      Color.fromARGB(255, 217, 255, 156),
+                    ], begin: Alignment.topLeft, end: Alignment.bottomRight),
+                    borderRadius: BorderRadius.circular(30)),
                 child: const ListTile(
                   contentPadding: EdgeInsets.all(20),
                   title: Text(

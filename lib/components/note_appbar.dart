@@ -44,7 +44,7 @@ class _NoteTopBarState extends State<NoteTopBar> {
           ),
         ),
         elevation: const MaterialStatePropertyAll(0),
-        minimumSize: const MaterialStatePropertyAll(Size(60, 60)));
+        minimumSize: const MaterialStatePropertyAll(Size(50, 50)));
     return Container(
       decoration: const BoxDecoration(
         gradient: LinearGradient(colors: [
@@ -81,6 +81,7 @@ class _NoteTopBarState extends State<NoteTopBar> {
                     style: iconButtonStyle,
                     child: const Icon(
                       Icons.refresh,
+                      size: 20,
                       color: Colors.black,
                     )),
                 const Spacer(),
@@ -95,6 +96,7 @@ class _NoteTopBarState extends State<NoteTopBar> {
                     style: iconButtonStyle,
                     child: const Icon(
                       Icons.delete_outline,
+                      size: 20,
                       color: Colors.black,
                     )),
                 const SizedBox(width: 5),
@@ -109,35 +111,38 @@ class _NoteTopBarState extends State<NoteTopBar> {
                     style: iconButtonStyle,
                     child: const Icon(
                       Icons.settings_outlined,
+                      size: 20,
                       color: Colors.black,
                     )),
               ],
             ),
-            const SizedBox(height: 10),
+            const SizedBox(height: 16),
             const Text('Hello, Hari!',
                 style: TextStyle(
                     fontSize: 32,
                     fontWeight: FontWeight.w900,
                     fontFamily: 'Jost')),
-            Consumer<NoteProvider>(
-                // Access provider to call refresh() on add/delete
-                builder: (context, provider, child) =>
-                    StreamBuilder<List<Map<String, dynamic>>>(
-                      stream: provider.noteStream,
-                      builder: (context, snapshot) {
-                        if (snapshot.hasData) {
-                          final notes = snapshot.data!;
-                          return Text(
-                            'You\'ve made ${notes.length} notes so far!',
-                            // ... (existing text style)
-                            style: const TextStyle(
-                                fontSize: 20, fontFamily: 'Jost'),
-                          );
-                        } else {
-                          return const Text('Loading...');
-                        }
-                      },
-                    )),
+            StatefulBuilder(
+              builder: (context, setState) => Consumer<NoteProvider>(
+                  // Access provider to call refresh() on add/delete
+                  builder: (context, provider, child) =>
+                      StreamBuilder<List<Map<String, dynamic>>>(
+                        stream: provider.noteStream,
+                        builder: (context, snapshot) {
+                          if (snapshot.hasData) {
+                            final notes = snapshot.data!;
+                            return Text(
+                              'You\'ve made ${notes.length} notes so far!',
+                              // ... (existing text style)
+                              style: const TextStyle(
+                                  fontSize: 20, fontFamily: 'Jost'),
+                            );
+                          } else {
+                            return const Text('Loading...');
+                          }
+                        },
+                      )),
+            ),
             const SizedBox(height: 20),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
