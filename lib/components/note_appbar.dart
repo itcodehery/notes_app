@@ -56,15 +56,6 @@ class _NoteTopBarState extends State<NoteTopBar> {
           bottomRight: Radius.circular(40),
         ),
       ),
-      // margin: const EdgeInsets.all(0),
-      // shape: const RoundedRectangleBorder(
-      //   borderRadius: BorderRadius.only(
-      //     bottomLeft: Radius.circular(40),
-      //     bottomRight: Radius.circular(40),
-      //   ),
-      // ),
-      // elevation: 0,
-      // color: const Color.fromARGB(255, 237, 255, 207),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
         child: Column(

@@ -1,8 +1,22 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:notes_app/theme.dart';
 
 class NoInternetPage extends StatelessWidget {
   const NoInternetPage({super.key});
+
+  Future<bool> checkInternet() async {
+    try {
+      final result = await InternetAddress.lookup('google.com');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        return true;
+      }
+    } on SocketException catch (_) {
+      return false;
+    }
+    return false;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,18 +53,17 @@ class NoInternetPage extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 40),
-            const SizedBox(
-              width: 300,
-              child: Text(
-                'If you have internet, close and reopen this app.',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 16,
-                  color: Colors.white,
-                  fontFamily: 'Jost',
-                ),
-              ),
-            ),
+            ElevatedButton(
+                onPressed: () async {
+                  var isInternet = await checkInternet();
+                  if (isInternet) {
+                    Navigator.pushNamed(context, '/home');
+                  }
+                },
+                child: const Text(
+                  'Retry',
+                  style: TextStyle(fontFamily: 'Jost', fontSize: 16),
+                )),
           ],
         ),
       ),

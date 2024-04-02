@@ -4,7 +4,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:notes_app/components/note_appbar.dart';
 import 'package:notes_app/components/note_card.dart';
-import 'package:notes_app/pages/nointernet.dart';
 import 'package:notes_app/pages/search.dart';
 import 'package:notes_app/provider/notes_provider.dart';
 import 'package:notes_app/theme.dart';

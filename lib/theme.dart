@@ -7,6 +7,7 @@ class AppTheme {
     primaryColorDark: const Color.fromARGB(100, 192, 255, 58),
     cardColor: const Color.fromARGB(255, 39, 39, 39),
     canvasColor: const Color.fromARGB(255, 28, 28, 28),
+    scaffoldBackgroundColor: const Color.fromARGB(255, 28, 28, 28),
     disabledColor: Colors.grey.shade900,
     splashColor: Colors.white,
     iconButtonTheme: const IconButtonThemeData(
